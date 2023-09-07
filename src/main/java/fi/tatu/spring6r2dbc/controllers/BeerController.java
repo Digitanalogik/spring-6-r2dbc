@@ -4,16 +4,19 @@ import fi.tatu.spring6r2dbc.domain.Beer;
 import fi.tatu.spring6r2dbc.model.BeerDto;
 import fi.tatu.spring6r2dbc.services.BeerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 @RequiredArgsConstructor
 public class BeerController {
 
+    public static final String BASE_URL = "http://localhost:8080";
     public static final String BEER_PATH = "/api/v2/beer";
     public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
 
@@ -29,4 +32,19 @@ public class BeerController {
         return beerService.getBeerById(beerId);
     }
 
+    @PostMapping(BEER_PATH)
+    Mono<ResponseEntity<Void>> createNewBeer(@RequestBody BeerDto beerDto) {
+
+        AtomicInteger atomicInteger = new AtomicInteger();
+
+        beerService.saveNewBeer(beerDto)
+            .subscribe(savedDto -> {
+                atomicInteger.set(savedDto.getId());
+            });
+
+        return Mono.just(ResponseEntity.created(UriComponentsBuilder
+            .fromHttpUrl(BASE_URL + BEER_PATH + "/" + atomicInteger.get())
+            .build().toUri())
+            .build());
+    }
 }
