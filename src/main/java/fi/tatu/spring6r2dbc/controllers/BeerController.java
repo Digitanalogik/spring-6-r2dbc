@@ -1,4 +1,4 @@
-package fi.tatu.spring6r2dbc.domain;
+package fi.tatu.spring6r2dbc.controllers;
 
 import fi.tatu.spring6r2dbc.model.BeerDto;
 import org.springframework.web.bind.annotation.GetMapping;
