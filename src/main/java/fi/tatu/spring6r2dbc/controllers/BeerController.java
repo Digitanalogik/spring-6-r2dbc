@@ -4,6 +4,8 @@ import fi.tatu.spring6r2dbc.domain.Beer;
 import fi.tatu.spring6r2dbc.model.BeerDto;
 import fi.tatu.spring6r2dbc.services.BeerService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -12,6 +14,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class BeerController {
@@ -62,10 +65,15 @@ public class BeerController {
     Mono<ResponseEntity<Void>> patchExistingBeer(@PathVariable("beerId") Integer beerId,
                                                  @RequestBody BeerDto beerDto) {
 
-
         beerService.patchBeer(beerId, beerDto)
                 .subscribe();
 
         return Mono.just(ResponseEntity.ok().build());
+    }
+
+    @DeleteMapping(BEER_PATH_ID)
+    Mono<ResponseEntity<Void>> deleteById(@PathVariable Integer beerId) {
+        return beerService.deleteById(beerId)
+            .map(response -> ResponseEntity.noContent().build());
     }
 }

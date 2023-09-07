@@ -4,11 +4,13 @@ import fi.tatu.spring6r2dbc.mappers.BeerMapper;
 import fi.tatu.spring6r2dbc.model.BeerDto;
 import fi.tatu.spring6r2dbc.repositories.BeerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class BeerServiceImpl implements BeerService {
@@ -72,5 +74,11 @@ public class BeerServiceImpl implements BeerService {
                     return foundBeer;
                 }).flatMap(beerRepository::save)
                 .map(beerMapper::beerToBeerDto);
+    }
+
+    @Override
+    public Mono<Void> deleteById(Integer beerId) {
+        log.debug("In the service implementation, trying to delete beer with ID={}", beerId);
+        return beerRepository.deleteById(beerId);
     }
 }
