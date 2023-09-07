@@ -58,4 +58,14 @@ public class BeerController {
         return Mono.just(ResponseEntity.ok().build());
     }
 
+    @PatchMapping (BEER_PATH_ID)
+    Mono<ResponseEntity<Void>> patchExistingBeer(@PathVariable("beerId") Integer beerId,
+                                                 @RequestBody BeerDto beerDto) {
+
+
+        beerService.patchBeer(beerId, beerDto)
+                .subscribe();
+
+        return Mono.just(ResponseEntity.ok().build());
+    }
 }
