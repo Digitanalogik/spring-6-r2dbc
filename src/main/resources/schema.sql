@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS beer
     beer_style          VARCHAR(255),
     upc                 VARCHAR(255),
     quantity_on_hand    INTEGER,
-    price               DECIMAL,
+    price               NUMERIC(7,2),
     created_date        TIMESTAMP,
     updated_date        TIMESTAMP
 );
