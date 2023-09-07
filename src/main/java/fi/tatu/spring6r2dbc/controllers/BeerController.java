@@ -1,12 +1,11 @@
 package fi.tatu.spring6r2dbc.controllers;
 
-import fi.tatu.spring6r2dbc.domain.Beer;
 import fi.tatu.spring6r2dbc.model.BeerDto;
 import fi.tatu.spring6r2dbc.services.BeerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
@@ -36,7 +35,7 @@ public class BeerController {
     }
 
     @PostMapping(BEER_PATH)
-    Mono<ResponseEntity<Void>> createNewBeer(@RequestBody BeerDto beerDto) {
+    Mono<ResponseEntity<Void>> createNewBeer(@Validated @RequestBody BeerDto beerDto) {
 
         AtomicInteger atomicInteger = new AtomicInteger();
 
@@ -53,7 +52,7 @@ public class BeerController {
 
     @PutMapping(BEER_PATH_ID)
     Mono<ResponseEntity<Void>> updateExistingBeer(@PathVariable("beerId") Integer beerId,
-                                                  @RequestBody BeerDto beerDto) {
+                                                  @Validated @RequestBody BeerDto beerDto) {
 
         beerService.updateBeer(beerId, beerDto)
             .subscribe();
@@ -63,7 +62,7 @@ public class BeerController {
 
     @PatchMapping (BEER_PATH_ID)
     Mono<ResponseEntity<Void>> patchExistingBeer(@PathVariable("beerId") Integer beerId,
-                                                 @RequestBody BeerDto beerDto) {
+                                                 @Validated @RequestBody BeerDto beerDto) {
 
         beerService.patchBeer(beerId, beerDto)
                 .subscribe();
