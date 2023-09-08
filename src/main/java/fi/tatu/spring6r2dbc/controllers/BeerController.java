@@ -30,8 +30,10 @@ public class BeerController {
     }
 
     @GetMapping(BEER_PATH_ID)
-    Mono<BeerDto> getBeerById(@PathVariable("beerId") Integer beerId) {
-        return beerService.getBeerById(beerId);
+    Mono<ResponseEntity<BeerDto>> getBeerById(@PathVariable("beerId") Integer beerId) {
+        return beerService.getBeerById(beerId)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @PostMapping(BEER_PATH)
