@@ -1,16 +1,9 @@
 package fi.tatu.spring6r2dbc.controllers;
 
-import fi.tatu.spring6r2dbc.domain.Beer;
 import fi.tatu.spring6r2dbc.domain.Customer;
-import fi.tatu.spring6r2dbc.model.BeerDto;
 import fi.tatu.spring6r2dbc.model.CustomerDto;
-import fi.tatu.spring6r2dbc.repositories.BeerRepositoryTest;
 import fi.tatu.spring6r2dbc.repositories.CustomerRepositoryTest;
-import fi.tatu.spring6r2dbc.repositories.CustomerRepositoryTest;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,6 +29,7 @@ class CustomerControllerTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().valueEquals(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+
                 .expectBody().jsonPath("$.size()").isEqualTo(2);
     }
 
