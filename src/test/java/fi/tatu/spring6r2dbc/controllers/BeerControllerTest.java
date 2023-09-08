@@ -1,5 +1,6 @@
 package fi.tatu.spring6r2dbc.controllers;
 
+import fi.tatu.spring6r2dbc.model.BeerDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -25,4 +26,14 @@ class BeerControllerTest {
             .expectHeader().valueEquals(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .expectBody().jsonPath("$.size()").isEqualTo(3);
     }
+
+    @Test
+    void testGetBeerById() {
+        webTestClient.get().uri(BeerController.BEER_PATH_ID, 1)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().valueEquals(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .expectBody(BeerDto.class);
+    }
+
 }
