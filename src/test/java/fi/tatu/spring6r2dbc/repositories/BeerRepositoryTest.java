@@ -17,12 +17,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 @DataR2dbcTest
 @Import(DatabaseConfiguration.class)
-class BeerRepositoryTest {
+public class BeerRepositoryTest {
 
     @Autowired
     BeerRepository beerRepository;
 
-    Beer getTestBeer() {
+    public static Beer getTestBeer() {
         return Beer.builder()
                 .beerName("Space Dust")
                 .beerStyle("IPA")
