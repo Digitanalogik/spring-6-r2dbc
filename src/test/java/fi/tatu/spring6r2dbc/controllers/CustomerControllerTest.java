@@ -1,5 +1,6 @@
 package fi.tatu.spring6r2dbc.controllers;
 
+import fi.tatu.spring6r2dbc.domain.Customer;
 import fi.tatu.spring6r2dbc.model.CustomerDto;
 import fi.tatu.spring6r2dbc.repositories.CustomerRepositoryTest;
 import fi.tatu.spring6r2dbc.repositories.CustomerRepositoryTest;
@@ -48,15 +49,30 @@ class CustomerControllerTest {
     @Test
     @Order(3)
     void testCreateCustomer() {
-        final String NEW_BEER_URL = "http://localhost:8080/api/v2/customer/3";
+        final String NEW_CUSTOMER_URL = "http://localhost:8080/api/v2/customer/3";
 
         webTestClient.post().uri(CustomerController.CUSTOMER_PATH)
                 .body(Mono.just(CustomerRepositoryTest.getTestCustomer()), CustomerDto.class)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectHeader().location(NEW_BEER_URL);
+                .expectHeader().location(NEW_CUSTOMER_URL);
     }
+
+    @Test
+    @Order(3)
+    void testCreateCustomerBadName() {
+
+        Customer testCustomer = CustomerRepositoryTest.getTestCustomer();
+        testCustomer.setName("");
+
+        webTestClient.post().uri(CustomerController.CUSTOMER_PATH)
+                .body(Mono.just(testCustomer), CustomerDto.class)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
 
     @Test
     @Order(4)
