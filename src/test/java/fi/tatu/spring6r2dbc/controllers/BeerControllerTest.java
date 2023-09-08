@@ -50,4 +50,13 @@ class BeerControllerTest {
             .expectStatus().isCreated()
             .expectHeader().location(NEW_BEER_URL);
     }
+
+    @Test
+    void testUpdateBeer() {
+
+        webTestClient.put().uri(BeerController.BEER_PATH_ID, 1)
+                .body(Mono.just(BeerRepositoryTest.getTestBeer()), BeerDto.class)
+                .exchange()
+                .expectStatus().isNoContent();
+    }
 }

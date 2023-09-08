@@ -57,7 +57,7 @@ public class BeerController {
         beerService.updateBeer(beerId, beerDto)
             .subscribe();
 
-        return Mono.just(ResponseEntity.ok().build());
+        return Mono.just(ResponseEntity.noContent().build());
     }
 
     @PatchMapping (BEER_PATH_ID)
