@@ -4,6 +4,7 @@ import fi.tatu.spring6r2dbc.model.BeerDto;
 import fi.tatu.spring6r2dbc.services.BeerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -56,8 +57,21 @@ public class BeerController {
     Mono<ResponseEntity<Void>> updateExistingBeer(@PathVariable("beerId") Integer beerId,
                                                   @Validated @RequestBody BeerDto beerDto) {
 
+        log.info("Controller was called to update Beer (id={})", beerId);
+
+        // Example: fine-grained processing of reactive stream
+        //  - Consume all elements in the sequence (stream)
+        //  - Handle errors, if any
+        //  - React to completion in the final step
+        beerService.getBeerById(beerId)
+            .subscribe( found -> log.info("Found: {}", found.toString()),
+                        error -> log.error(String.valueOf(error)),
+                           () -> log.info("Controller will next call Service to update Beer (id={})", beerId));
+
         beerService.updateBeer(beerId, beerDto)
-            .subscribe();
+            .subscribe( value -> log.info("Updated: {}", value),
+                        error -> log.error(String.valueOf(error)),
+                           () -> log.info("Done!", beerId));
 
         return Mono.just(ResponseEntity.noContent().build());
     }
