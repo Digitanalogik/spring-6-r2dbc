@@ -1,5 +1,6 @@
 package fi.tatu.spring6r2dbc.controllers;
 
+import fi.tatu.spring6r2dbc.domain.Beer;
 import fi.tatu.spring6r2dbc.model.BeerDto;
 import fi.tatu.spring6r2dbc.repositories.BeerRepositoryTest;
 import org.junit.jupiter.api.MethodOrderer;
@@ -59,6 +60,21 @@ class BeerControllerTest {
 
     @Test
     @Order(4)
+    void testCreateBeerBadName() {
+        final String NEW_BEER_URL = "http://localhost:8080/api/v2/beer/4";
+
+        Beer testBeer = BeerRepositoryTest.getTestBeer();
+        testBeer.setBeerName("");
+
+        webTestClient.post().uri(BeerController.BEER_PATH)
+                .body(Mono.just(testBeer), BeerDto.class)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(5)
     void testUpdateBeer() {
 
         webTestClient.put().uri(BeerController.BEER_PATH_ID, 1)
@@ -78,7 +94,7 @@ class BeerControllerTest {
 
 
     @Test
-    @Order(6)
+    @Order(7)
     void testGetBeerByIdNotFound() {
         webTestClient.get().uri(BeerController.BEER_PATH_ID, 1)
                 .exchange()
