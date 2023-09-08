@@ -34,11 +34,9 @@ public class CustomerController {
     @GetMapping(CUSTOMER_PATH_ID)
     Mono<ResponseEntity<CustomerDto>> getCustomerById(@PathVariable("customerId") Integer customerId) {
         return customerService.getCustomerById(customerId)
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+            .map(ResponseEntity::ok)
+            .defaultIfEmpty(ResponseEntity.notFound().build());
     }
-
-
 
     @PostMapping(CUSTOMER_PATH)
     Mono<ResponseEntity<Void>> createNewCustomer(@Validated @RequestBody CustomerDto CustomerDto) {
@@ -46,9 +44,9 @@ public class CustomerController {
         AtomicInteger atomicInteger = new AtomicInteger();
 
         customerService.saveNewCustomer(CustomerDto)
-                .subscribe(savedDto -> {
-                    atomicInteger.set(savedDto.getId());
-                });
+            .subscribe(savedDto -> {
+                atomicInteger.set(savedDto.getId());
+            });
 
         return Mono.just(ResponseEntity.created(UriComponentsBuilder
                         .fromHttpUrl(BASE_URL + CUSTOMER_PATH + "/" + atomicInteger.get())
@@ -61,9 +59,9 @@ public class CustomerController {
                                                   @Validated @RequestBody CustomerDto CustomerDto) {
 
         customerService.updateCustomer(customerId, CustomerDto)
-                .subscribe();
+            .subscribe();
 
-        return Mono.just(ResponseEntity.ok().build());
+        return Mono.just(ResponseEntity.noContent().build());
     }
 
     @PatchMapping (CUSTOMER_PATH_ID)
@@ -71,7 +69,7 @@ public class CustomerController {
                                                  @Validated @RequestBody CustomerDto CustomerDto) {
 
         customerService.patchCustomer(customerId, CustomerDto)
-                .subscribe();
+            .subscribe();
 
         return Mono.just(ResponseEntity.ok().build());
     }
@@ -79,7 +77,7 @@ public class CustomerController {
     @DeleteMapping(CUSTOMER_PATH_ID)
     Mono<ResponseEntity<Void>> deleteById(@PathVariable Integer customerId) {
         return customerService.deleteCustomerById(customerId)
-                .map(response -> ResponseEntity.noContent().build());
+            .thenReturn(ResponseEntity.noContent().build());
     }
 
 }
