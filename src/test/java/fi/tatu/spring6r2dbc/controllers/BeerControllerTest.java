@@ -76,4 +76,13 @@ class BeerControllerTest {
             .exchange()
             .expectStatus().isNoContent();
     }
+
+
+    @Test
+    @Order(6)
+    void testGetBeerByIdNotFound() {
+        webTestClient.get().uri(BeerController.BEER_PATH_ID, 1)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
 }
