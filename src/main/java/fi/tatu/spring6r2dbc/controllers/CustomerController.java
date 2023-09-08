@@ -31,12 +31,6 @@ public class CustomerController {
         return customerService.listCustomers();
     }
 
-    /*
-    @GetMapping(CUSTOMER_PATH_ID)
-    Mono<CustomerDto> getCustomerById(@PathVariable("customerId") Integer customerId) {
-        return customerService.getCustomerById(customerId);
-    }
-    */
     @GetMapping(CUSTOMER_PATH_ID)
     Mono<ResponseEntity<CustomerDto>> getCustomerById(@PathVariable("customerId") Integer customerId) {
         return customerService.getCustomerById(customerId)
