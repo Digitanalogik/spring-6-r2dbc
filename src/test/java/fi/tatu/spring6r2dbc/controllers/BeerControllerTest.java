@@ -61,8 +61,6 @@ class BeerControllerTest {
     @Test
     @Order(4)
     void testCreateBeerBadName() {
-        final String NEW_BEER_URL = "http://localhost:8080/api/v2/beer/4";
-
         Beer testBeer = BeerRepositoryTest.getTestBeer();
         testBeer.setBeerName("");
 
@@ -84,7 +82,19 @@ class BeerControllerTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
+    void testUpdateBeerBadRequest() {
+        Beer testBeer = BeerRepositoryTest.getTestBeer();
+        testBeer.setBeerStyle("");
+
+        webTestClient.put().uri(BeerController.BEER_PATH_ID, 1)
+                .body(Mono.just(testBeer), BeerDto.class)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(7)
     void testDeleteBeer() {
 
         webTestClient.delete().uri(BeerController.BEER_PATH_ID, 1)
@@ -94,7 +104,7 @@ class BeerControllerTest {
 
 
     @Test
-    @Order(7)
+    @Order(8)
     void testGetBeerByIdNotFound() {
         webTestClient.get().uri(BeerController.BEER_PATH_ID, 1)
                 .exchange()

@@ -1,7 +1,10 @@
 package fi.tatu.spring6r2dbc.controllers;
 
+import fi.tatu.spring6r2dbc.domain.Beer;
 import fi.tatu.spring6r2dbc.domain.Customer;
+import fi.tatu.spring6r2dbc.model.BeerDto;
 import fi.tatu.spring6r2dbc.model.CustomerDto;
+import fi.tatu.spring6r2dbc.repositories.BeerRepositoryTest;
 import fi.tatu.spring6r2dbc.repositories.CustomerRepositoryTest;
 import fi.tatu.spring6r2dbc.repositories.CustomerRepositoryTest;
 import org.junit.jupiter.api.MethodOrderer;
@@ -86,6 +89,18 @@ class CustomerControllerTest {
 
     @Test
     @Order(5)
+    void testUpdateCustomerBadRequest() {
+        Customer testCustomer = CustomerRepositoryTest.getTestCustomer();
+        testCustomer.setName("");
+
+        webTestClient.put().uri(CustomerController.CUSTOMER_PATH_ID, 1)
+                .body(Mono.just(testCustomer), CustomerDto.class)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    @Order(6)
     void testDeleteCustomer() {
 
         webTestClient.delete().uri(CustomerController.CUSTOMER_PATH_ID, 1)
@@ -93,13 +108,11 @@ class CustomerControllerTest {
                 .expectStatus().isNoContent();
     }
 
-
     @Test
-    @Order(6)
+    @Order(7)
     void testGetCustomerByIdNotFound() {
         webTestClient.get().uri(CustomerController.CUSTOMER_PATH_ID, 1)
                 .exchange()
                 .expectStatus().isNotFound();
     }
-
 }
