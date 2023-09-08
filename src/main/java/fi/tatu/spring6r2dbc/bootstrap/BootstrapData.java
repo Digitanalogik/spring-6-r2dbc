@@ -1,7 +1,9 @@
 package fi.tatu.spring6r2dbc.bootstrap;
 
 import fi.tatu.spring6r2dbc.domain.Beer;
+import fi.tatu.spring6r2dbc.domain.Customer;
 import fi.tatu.spring6r2dbc.repositories.BeerRepository;
+import fi.tatu.spring6r2dbc.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -16,14 +18,21 @@ import java.time.LocalDateTime;
 public class BootstrapData implements CommandLineRunner {
 
     private final BeerRepository beerRepository;
+    private final CustomerRepository customerRepository;
 
     @Override
     public void run(String... args) throws Exception {
         loadBeerData();
+        loadCustomerData();
 
         beerRepository.count().subscribe(count -> {
-            log.info("Count is: {}", count);
+            log.info("Beer count is: {}", count);
         });
+
+        customerRepository.count().subscribe(count -> {
+            log.info("Customer count is: {}", count);
+        });
+
     }
 
     private void loadBeerData() {
@@ -72,4 +81,24 @@ public class BootstrapData implements CommandLineRunner {
         });
     }
 
+    private void loadCustomerData() {
+
+        log.info("Loading Customer data...");
+
+        customerRepository.count().subscribe(count -> {
+            if (count == 0) {
+
+                Customer customer1 = Customer.builder()
+                        .name("John Doe")
+                        .build();
+
+                Customer customer2 = Customer.builder()
+                        .name("Super Mario")
+                        .build();
+
+                customerRepository.save(customer1).subscribe();
+                customerRepository.save(customer2).subscribe();
+            }
+        });
+    }
 }

@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequiredArgsConstructor
 public class BeerController {
 
-    public static final String BASE_URL = "http://localhost:8080";
+    private static final String BASE_URL = "http://localhost:8080";
     public static final String BEER_PATH = "/api/v2/beer";
     public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
 

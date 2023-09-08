@@ -9,3 +9,11 @@ CREATE TABLE IF NOT EXISTS beer
     created_date        TIMESTAMP,
     updated_date        TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS customer
+(
+    id              INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    name            VARCHAR(255),
+    created_date    TIMESTAMP,
+    updated_date    TIMESTAMP
+);
