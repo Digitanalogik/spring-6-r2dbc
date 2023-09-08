@@ -2,7 +2,10 @@ package fi.tatu.spring6r2dbc.controllers;
 
 import fi.tatu.spring6r2dbc.model.BeerDto;
 import fi.tatu.spring6r2dbc.repositories.BeerRepositoryTest;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +16,7 @@ import reactor.core.publisher.Mono;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
 @AutoConfigureWebTestClient
 class BeerControllerTest {
@@ -22,6 +26,7 @@ class BeerControllerTest {
 
 
     @Test
+    @Order(1)
     void testListBeers() {
         webTestClient.get().uri(BeerController.BEER_PATH)
             .exchange()
@@ -31,6 +36,7 @@ class BeerControllerTest {
     }
 
     @Test
+    @Order(2)
     void testGetBeerById() {
         webTestClient.get().uri(BeerController.BEER_PATH_ID, 1)
                 .exchange()
@@ -40,6 +46,7 @@ class BeerControllerTest {
     }
 
     @Test
+    @Order(3)
     void testCreateBeer() {
         final String NEW_BEER_URL = "http://localhost:8080/api/v2/beer/4";
 
@@ -52,6 +59,7 @@ class BeerControllerTest {
     }
 
     @Test
+    @Order(4)
     void testUpdateBeer() {
 
         webTestClient.put().uri(BeerController.BEER_PATH_ID, 1)
@@ -61,6 +69,7 @@ class BeerControllerTest {
     }
 
     @Test
+    @Order(5)
     void testDeleteBeer() {
 
         webTestClient.delete().uri(BeerController.BEER_PATH_ID, 1)
