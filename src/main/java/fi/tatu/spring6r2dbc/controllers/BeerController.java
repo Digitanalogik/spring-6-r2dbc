@@ -43,9 +43,7 @@ public class BeerController {
         AtomicInteger atomicInteger = new AtomicInteger();
 
         beerService.saveNewBeer(beerDto)
-            .subscribe(savedDto -> {
-                atomicInteger.set(savedDto.getId());
-            });
+            .subscribe(savedDto -> atomicInteger.set(savedDto.getId()));
 
         return Mono.just(ResponseEntity.created(UriComponentsBuilder
             .fromHttpUrl(BASE_URL + BEER_PATH + "/" + atomicInteger.get())
