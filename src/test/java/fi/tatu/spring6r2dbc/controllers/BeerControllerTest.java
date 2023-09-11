@@ -125,7 +125,7 @@ class BeerControllerTest {
     }
 
     @Test
-    @Order(9)
+    @Order(10)
     void testDeleteBeerNotFound() {
         webTestClient.delete()
                 .uri(BeerController.BEER_PATH_ID, 999)
