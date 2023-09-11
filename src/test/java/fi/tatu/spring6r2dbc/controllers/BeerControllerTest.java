@@ -121,12 +121,21 @@ class BeerControllerTest {
     @Test
     @Order(9)
     void testDeleteBeer() {
-
         webTestClient.delete()
             .uri(BeerController.BEER_PATH_ID, 1)
             .exchange()
             .expectStatus().isNoContent();
     }
+
+    @Test
+    @Order(9)
+    void testDeleteBeerNotFound() {
+        webTestClient.delete()
+                .uri(BeerController.BEER_PATH_ID, 999)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
 
     @Test
     @Order(10)
