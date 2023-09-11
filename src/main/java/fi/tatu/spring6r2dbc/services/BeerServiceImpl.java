@@ -55,25 +55,25 @@ public class BeerServiceImpl implements BeerService {
     public Mono<BeerDto> patchBeer(Integer beerId, BeerDto beerDto) {
 
         return beerRepository.findById(beerId)
-                .map(foundBeer -> {
-                    if(StringUtils.hasText(beerDto.getBeerName())) {
-                        foundBeer.setBeerName(beerDto.getBeerName());
-                    }
-                    if(StringUtils.hasText(beerDto.getBeerStyle())) {
-                        foundBeer.setBeerStyle(beerDto.getBeerStyle());
-                    }
-                    if(StringUtils.hasText(beerDto.getUpc())) {
-                        foundBeer.setUpc(beerDto.getUpc());
-                    }
-                    if(beerDto.getQuantityOnHand() != null) {
-                        foundBeer.setQuantityOnHand(beerDto.getQuantityOnHand());
-                    }
-                    if(beerDto.getPrice() != null) {
-                        foundBeer.setPrice(beerDto.getPrice());
-                    }
-                    return foundBeer;
-                }).flatMap(beerRepository::save)
-                .map(beerMapper::beerToBeerDto);
+            .map(foundBeer -> {
+                if(StringUtils.hasText(beerDto.getBeerName())) {
+                    foundBeer.setBeerName(beerDto.getBeerName());
+                }
+                if(StringUtils.hasText(beerDto.getBeerStyle())) {
+                    foundBeer.setBeerStyle(beerDto.getBeerStyle());
+                }
+                if(StringUtils.hasText(beerDto.getUpc())) {
+                    foundBeer.setUpc(beerDto.getUpc());
+                }
+                if(beerDto.getQuantityOnHand() != null) {
+                    foundBeer.setQuantityOnHand(beerDto.getQuantityOnHand());
+                }
+                if(beerDto.getPrice() != null) {
+                    foundBeer.setPrice(beerDto.getPrice());
+                }
+                return foundBeer;
+            }).flatMap(beerRepository::save)
+            .map(beerMapper::beerToBeerDto);
     }
 
     @Override
