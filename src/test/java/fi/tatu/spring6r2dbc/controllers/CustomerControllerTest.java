@@ -25,22 +25,23 @@ class CustomerControllerTest {
     @Test
     @Order(1)
     void testListCustomers() {
-        webTestClient.get().uri(CustomerController.CUSTOMER_PATH)
-                .exchange()
-                .expectStatus().isOk()
-                .expectHeader().valueEquals(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-
-                .expectBody().jsonPath("$.size()").isEqualTo(2);
+        webTestClient.get()
+            .uri(CustomerController.CUSTOMER_PATH)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().valueEquals(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .expectBody().jsonPath("$.size()").isEqualTo(2);
     }
 
     @Test
     @Order(2)
     void testGetCustomerById() {
-        webTestClient.get().uri(CustomerController.CUSTOMER_PATH_ID, 1)
-                .exchange()
-                .expectStatus().isOk()
-                .expectHeader().valueEquals(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .expectBody(CustomerDto.class);
+        webTestClient.get()
+            .uri(CustomerController.CUSTOMER_PATH_ID, 1)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().valueEquals(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .expectBody(CustomerDto.class);
     }
 
     @Test
@@ -48,37 +49,38 @@ class CustomerControllerTest {
     void testCreateCustomer() {
         final String NEW_CUSTOMER_URL = "http://localhost:8080/api/v2/customer/3";
 
-        webTestClient.post().uri(CustomerController.CUSTOMER_PATH)
-                .body(Mono.just(CustomerRepositoryTest.getTestCustomer()), CustomerDto.class)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .exchange()
-                .expectStatus().isCreated()
-                .expectHeader().location(NEW_CUSTOMER_URL);
+        webTestClient.post()
+            .uri(CustomerController.CUSTOMER_PATH)
+            .body(Mono.just(CustomerRepositoryTest.getTestCustomer()), CustomerDto.class)
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .exchange()
+            .expectStatus().isCreated()
+            .expectHeader().location(NEW_CUSTOMER_URL);
     }
 
     @Test
     @Order(3)
     void testCreateCustomerBadName() {
-
         Customer testCustomer = CustomerRepositoryTest.getTestCustomer();
         testCustomer.setName("");
 
-        webTestClient.post().uri(CustomerController.CUSTOMER_PATH)
-                .body(Mono.just(testCustomer), CustomerDto.class)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .exchange()
-                .expectStatus().isBadRequest();
+        webTestClient.post()
+            .uri(CustomerController.CUSTOMER_PATH)
+            .body(Mono.just(testCustomer), CustomerDto.class)
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .exchange()
+            .expectStatus().isBadRequest();
     }
 
 
     @Test
     @Order(4)
     void testUpdateCustomer() {
-
-        webTestClient.put().uri(CustomerController.CUSTOMER_PATH_ID, 1)
-                .body(Mono.just(CustomerRepositoryTest.getTestCustomer()), CustomerDto.class)
-                .exchange()
-                .expectStatus().isNoContent();
+        webTestClient.put()
+            .uri(CustomerController.CUSTOMER_PATH_ID, 1)
+            .body(Mono.just(CustomerRepositoryTest.getTestCustomer()), CustomerDto.class)
+            .exchange()
+            .expectStatus().isNoContent();
     }
 
     @Test
@@ -87,26 +89,27 @@ class CustomerControllerTest {
         Customer testCustomer = CustomerRepositoryTest.getTestCustomer();
         testCustomer.setName("");
 
-        webTestClient.put().uri(CustomerController.CUSTOMER_PATH_ID, 1)
-                .body(Mono.just(testCustomer), CustomerDto.class)
-                .exchange()
-                .expectStatus().isBadRequest();
+        webTestClient.put()
+            .uri(CustomerController.CUSTOMER_PATH_ID, 1)
+            .body(Mono.just(testCustomer), CustomerDto.class)
+            .exchange()
+            .expectStatus().isBadRequest();
     }
 
     @Test
     @Order(6)
     void testDeleteCustomer() {
-
-        webTestClient.delete().uri(CustomerController.CUSTOMER_PATH_ID, 1)
-                .exchange()
-                .expectStatus().isNoContent();
+        webTestClient.delete()
+            .uri(CustomerController.CUSTOMER_PATH_ID, 1)
+            .exchange()
+            .expectStatus().isNoContent();
     }
 
     @Test
     @Order(7)
     void testGetCustomerByIdNotFound() {
         webTestClient.get().uri(CustomerController.CUSTOMER_PATH_ID, 1)
-                .exchange()
-                .expectStatus().isNotFound();
+            .exchange()
+            .expectStatus().isNotFound();
     }
 }
