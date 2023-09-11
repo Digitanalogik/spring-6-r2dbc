@@ -46,6 +46,14 @@ class CustomerControllerTest {
 
     @Test
     @Order(3)
+    void testGetCustomerByIdNotFound() {
+        webTestClient.get().uri(CustomerController.CUSTOMER_PATH_ID, 1)
+            .exchange()
+            .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(4)
     void testCreateCustomer() {
         final String NEW_CUSTOMER_URL = "http://localhost:8080/api/v2/customer/3";
 
@@ -59,7 +67,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    @Order(3)
+    @Order(5)
     void testCreateCustomerBadName() {
         Customer testCustomer = CustomerRepositoryTest.getTestCustomer();
         testCustomer.setName("");
@@ -74,7 +82,7 @@ class CustomerControllerTest {
 
 
     @Test
-    @Order(4)
+    @Order(6)
     void testUpdateCustomer() {
         webTestClient.put()
             .uri(CustomerController.CUSTOMER_PATH_ID, 1)
@@ -84,7 +92,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    @Order(5)
+    @Order(7)
     void testUpdateCustomerBadRequest() {
         Customer testCustomer = CustomerRepositoryTest.getTestCustomer();
         testCustomer.setName("");
@@ -97,7 +105,18 @@ class CustomerControllerTest {
     }
 
     @Test
-    @Order(6)
+    @Order(8)
+    void testUpdateCustomerNotFound() {
+        webTestClient.put()
+            .uri(CustomerController.CUSTOMER_PATH_ID, 999)
+            .body(Mono.just(CustomerRepositoryTest.getTestCustomer()), CustomerDto.class)
+            .exchange()
+            .expectStatus().isNotFound();
+    }
+
+
+    @Test
+    @Order(9)
     void testDeleteCustomer() {
         webTestClient.delete()
             .uri(CustomerController.CUSTOMER_PATH_ID, 1)
@@ -106,10 +125,12 @@ class CustomerControllerTest {
     }
 
     @Test
-    @Order(7)
-    void testGetCustomerByIdNotFound() {
-        webTestClient.get().uri(CustomerController.CUSTOMER_PATH_ID, 1)
+    @Order(10)
+    void testDeleteCustomerNotFound() {
+        webTestClient.delete()
+            .uri(CustomerController.CUSTOMER_PATH_ID, 999)
             .exchange()
             .expectStatus().isNotFound();
     }
+
 }
