@@ -47,6 +47,16 @@ class BeerControllerTest {
 
     @Test
     @Order(3)
+    void testGetBeerByIdNotFound() {
+
+        webTestClient.get().uri(BeerController.BEER_PATH_ID, 999)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+
+    @Test
+    @Order(4)
     void testCreateBeer() {
         final String NEW_BEER_URL = "http://localhost:8080/api/v2/beer/4";
 
@@ -59,7 +69,7 @@ class BeerControllerTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     void testCreateBeerBadName() {
         Beer testBeer = BeerRepositoryTest.getTestBeer();
         testBeer.setBeerName("");
@@ -72,7 +82,7 @@ class BeerControllerTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     void testUpdateBeer() {
 
         webTestClient.put().uri(BeerController.BEER_PATH_ID, 1)
@@ -82,7 +92,7 @@ class BeerControllerTest {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     void testUpdateBeerBadRequest() {
         Beer testBeer = BeerRepositoryTest.getTestBeer();
         testBeer.setBeerStyle("");
@@ -94,20 +104,21 @@ class BeerControllerTest {
     }
 
     @Test
-    @Order(7)
+    @Order(8)
+    void testUpdateBeerNotFound() {
+
+        webTestClient.put().uri(BeerController.BEER_PATH_ID, 999)
+                .body(Mono.just(BeerRepositoryTest.getTestBeer()), BeerDto.class)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    @Order(9)
     void testDeleteBeer() {
 
         webTestClient.delete().uri(BeerController.BEER_PATH_ID, 1)
             .exchange()
             .expectStatus().isNoContent();
-    }
-
-    @Test
-    @Order(8)
-    void testGetBeerByIdNotFound() {
-
-        webTestClient.get().uri(BeerController.BEER_PATH_ID, 999)
-            .exchange()
-            .expectStatus().isNotFound();
     }
 }
