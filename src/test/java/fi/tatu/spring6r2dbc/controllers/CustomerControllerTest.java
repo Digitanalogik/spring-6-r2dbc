@@ -47,7 +47,7 @@ class CustomerControllerTest {
     @Test
     @Order(3)
     void testGetCustomerByIdNotFound() {
-        webTestClient.get().uri(CustomerController.CUSTOMER_PATH_ID, 1)
+        webTestClient.get().uri(CustomerController.CUSTOMER_PATH_ID, 999)
             .exchange()
             .expectStatus().isNotFound();
     }
