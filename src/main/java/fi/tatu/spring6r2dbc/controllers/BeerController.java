@@ -4,10 +4,11 @@ import fi.tatu.spring6r2dbc.model.BeerDto;
 import fi.tatu.spring6r2dbc.services.BeerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,6 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class BeerController {
 
     private static final String BASE_URL = "http://localhost:8080";
+
     public static final String BEER_PATH = "/api/v2/beer";
     public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
 
@@ -55,8 +57,8 @@ public class BeerController {
     Mono<ResponseEntity<Void>> updateExistingBeer(@PathVariable("beerId") Integer beerId,
                                                   @Validated @RequestBody BeerDto beerDto) {
 
-        log.info("Controller was called to update Beer (id={})", beerId);
-
+        // log.info("Controller was called to update Beer (id={})", beerId);
+        /*
         // Example: fine-grained processing of reactive stream
         //  - Consume all elements in the sequence (stream)
         //  - Handle errors, if any
@@ -65,13 +67,11 @@ public class BeerController {
             .subscribe( found -> log.info("Found: {}", found.toString()),
                         error -> log.error(String.valueOf(error)),
                            () -> log.info("Controller will next call Service to update Beer (id={})", beerId));
+        */
 
-        beerService.updateBeer(beerId, beerDto)
-            .subscribe( value -> log.info("Updated: {}", value),
-                        error -> log.error(String.valueOf(error)),
-                           () -> log.info("Done!", beerId));
-
-        return Mono.just(ResponseEntity.noContent().build());
+        return beerService.updateBeer(beerId, beerDto)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
+                .map(saveDto -> ResponseEntity.noContent().build());
     }
 
     @PatchMapping (BEER_PATH_ID)
